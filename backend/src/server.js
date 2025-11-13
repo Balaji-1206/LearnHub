@@ -3,13 +3,15 @@ const express = require('express');
 const cors = require('cors');
 const path = require('path');
 
-const connectDB = require('./src/config/db');
+const connectDB = require('./config/db');
 
 const authRoutes = require('./routes/auth');
 const userRoutes = require('./routes/users');
+
 const courseRoutes = require('./routes/courses');
 const noteRoutes = require('./routes/notes');
 const adminRoutes = require('./routes/admin');
+const progressRoutes = require('./routes/progress');
 
 const app = express();
 app.use(cors());
@@ -27,6 +29,7 @@ app.use('/api/users', userRoutes);
 app.use('/api/courses', courseRoutes);
 app.use('/api/notes', noteRoutes);
 app.use('/api/admin', adminRoutes);
+app.use('/api/progress', progressRoutes);
 
 // health
 app.get('/', (req, res) => res.json({ ok: true, name: 'LearnHub API' }));
