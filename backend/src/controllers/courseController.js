@@ -36,13 +36,16 @@ const createCourse = async (req, res) => {
 };
 
 const listCourses = async (req, res) => {
-  const { tag, q, instructor, page = 1, limit = 20 } = req.query;
-  const filter = { published: true };
+  const { tag, q, instructor, page = 1, limit = 20, all } = req.query;
+  const filter = all === '1' ? {} : { published: true };
   if (tag) filter.tags = tag;
   if (instructor) filter.instructor = instructor;
   if (q) filter.$or = [{ title: new RegExp(q, 'i') }, { description: new RegExp(q, 'i') }];
   const skip = (page - 1) * limit;
   const courses = await Course.find(filter).sort({ createdAt: -1 }).skip(skip).limit(Number(limit)).populate('instructor','name email');
+  if (process.env.DEBUG_COURSES === '1') {
+    console.log('[listCourses] filter=', filter, 'returned=', courses.length);
+  }
   // ensure cover and asset urls are absolute (in case older entries used relative paths)
   const host = req.protocol + '://' + req.get('host');
   const normalized = courses.map(c => {

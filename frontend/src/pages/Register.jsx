@@ -43,7 +43,6 @@ export default function Register({ setUser }) {
 
       <div className="login-card shadow-lg text-center">
         <div className="brand mb-3">
-          <div className="brand-logo">LH</div>
           <h3 className="m-0">Create account</h3>
           <small className="text-muted">Join LearnHub — start learning</small>
         </div>

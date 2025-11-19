@@ -58,7 +58,6 @@ export default function Login({ setUser }) {
 
         <div className="login-card shadow-lg text-center">
           <div className="brand mb-3">
-            <div className="brand-logo">LH</div>
             <h3 className="m-0">LearnHub</h3>
             <small className="text-muted">Sign in to continue</small>
           </div>

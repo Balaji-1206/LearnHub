@@ -38,8 +38,7 @@ export default function Navbar({ user, setUser }) {
       <div className="container d-flex align-items-center justify-content-between py-2">
         {/* LEFT: Brand */}
         <div className="d-flex align-items-center gap-3">
-          <div className="brand d-flex align-items-center text-decoration-none" aria-label="LearnHub logo">
-            <div className="brand-logo me-2">LH</div>
+          <div className="brand d-flex align-items-center text-decoration-none" aria-label="LearnHub brand">
             <span className="brand-text fw-bold">LearnHub</span>
           </div>
         </div>

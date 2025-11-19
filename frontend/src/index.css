@@ -212,7 +212,6 @@ body {
 
 /* small screen tweaks */
 @media (max-width: 575px) {
-  .app-navbar .brand-text { display:none; } /* show compact on tiny screens */
   .profile-avatar { width: 34px; height:34px; }
 }
 /* HOME / DASHBOARD STYLES */

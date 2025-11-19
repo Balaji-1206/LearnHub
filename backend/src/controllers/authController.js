@@ -19,11 +19,15 @@ const register = async (req, res) => {
     user = new User({ name, email, passwordHash, role: role || 'student' });
     await user.save();
 
+    if (!process.env.JWT_SECRET) {
+      console.error('JWT_SECRET missing at register');
+      return res.status(500).json({ message: 'Server config error: missing JWT_SECRET' });
+    }
     const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: process.env.JWT_EXPIRY || '7d' });
     res.json({ token, user: { id: user._id, name: user.name, email: user.email, role: user.role, avatarUrl: user.avatarUrl ? (user.avatarUrl.startsWith('/uploads') ? (req.protocol + '://' + req.get('host') + user.avatarUrl) : user.avatarUrl) : undefined } });
   } catch (err) {
-    console.error(err);
-    res.status(500).json({ message: 'Server error' });
+    console.error('Register error:', err);
+    res.status(500).json({ message: 'Server error', detail: process.env.DEBUG_AUTH ? (err.message || 'unknown') : undefined });
   }
 };
 
@@ -36,11 +40,15 @@ const login = async (req, res) => {
     const ok = await bcrypt.compare(password, user.passwordHash);
     if (!ok) return res.status(400).json({ message: 'Invalid credentials' });
 
+    if (!process.env.JWT_SECRET) {
+      console.error('JWT_SECRET missing at login');
+      return res.status(500).json({ message: 'Server config error: missing JWT_SECRET' });
+    }
     const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: process.env.JWT_EXPIRY || '7d' });
     res.json({ token, user: { id: user._id, name: user.name, email: user.email, role: user.role, avatarUrl: user.avatarUrl ? (user.avatarUrl.startsWith('/uploads') ? (req.protocol + '://' + req.get('host') + user.avatarUrl) : user.avatarUrl) : undefined } });
   } catch (err) {
-    console.error(err);
-    res.status(500).json({ message: 'Server error' });
+    console.error('Login error:', err);
+    res.status(500).json({ message: 'Server error', detail: process.env.DEBUG_AUTH ? (err.message || 'unknown') : undefined });
   }
 };
 

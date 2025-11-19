@@ -20,6 +20,10 @@ app.use(express.json());
 // static uploads
 app.use('/uploads', express.static(path.join(__dirname, '..', process.env.UPLOAD_DIR || 'uploads')));
 
+// basic env validation (diagnostic; remove in production if noisy)
+if (!process.env.MONGO_URI) console.warn('Warning: MONGO_URI not set, using local default');
+if (!process.env.JWT_SECRET) console.warn('Warning: JWT_SECRET not set; auth will fail');
+
 // connect db
 connectDB(process.env.MONGO_URI || 'mongodb://localhost:27017/learnhub');
 
@@ -32,7 +36,7 @@ app.use('/api/admin', adminRoutes);
 app.use('/api/progress', progressRoutes);
 
 // health
-app.get('/', (req, res) => res.json({ ok: true, name: 'LearnHub API' }));
+app.get('/', (req, res) => res.json({ ok: true, name: 'LearnHub API', hasJwt: !!process.env.JWT_SECRET }));
 
 const PORT = process.env.PORT || 4000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
